@@ -1,0 +1,90 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              07/01/2018 11:05:00 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\Output\main.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\Lib;..\inc;..\Project) DEBUG O
+                    -BJECTEXTEND PRINT(..\Output\main.lst) TABS(2) OBJECT(..\Output\main.obj)
+
+line level    source
+
+   1          /****************************************Copyright (c)****************************************************
+   2          **                                        
+   3          **                                 
+   4          **
+   5          **--------------File Info---------------------------------------------------------------------------------
+   6          ** File name:     
+   7          ** Last modified Date:          
+   8          ** Last Version:       
+   9          ** Descriptions:              
+  10          **--------------------------------------------------------------------------------------------------------
+  11          ** Created by:      FiYu
+  12          ** Created date:    2016-9-18
+  13          ** Version:         1.0
+  14          ** Descriptions:    MPU6050读原始数据实验     
+  15          **--------------------------------------------------------------------------------------------------------
+  16          ** Modified by:     FiYu
+  17          ** Modified date:   2016-11-28
+  18          ** Version:         2.0
+  19          ** Descriptions:    
+  20          ** Rechecked by:          
+  21          **********************************************************************************************************
+             -/
+  22          /****-----请阅读ReadMe.txt进行实验-----***********/
+  23          
+  24          #include  "delay.h"
+*** WARNING C318 IN LINE 24 OF main.c: can't open file 'delay.h'
+  25          #include  "mpu6050.H" 
+*** WARNING C318 IN LINE 25 OF main.c: can't open file 'mpu6050.H'
+  26          #include  "uart.h"
+*** WARNING C318 IN LINE 26 OF main.c: can't open file 'uart.h'
+  27          
+  28          /***************************************************************************
+  29           * 描  述 : 主函数
+  30           * 入  参 : 无
+  31           * 返回值 : 无
+  32           **************************************************************************/
+  33          int main()
+  34          {     
+  35   1      /////////////////////////////////////////////////
+  36   1      //注意: STC15W4K32S4系列的芯片,上电后所有与PWM相关的IO口均为
+  37   1      //      高阻态,需将这些口设置为准双向口或强推挽模式方可正常使用
+  38   1      //相关IO: P0.6/P0.7/P1.6/P1.7/P2.1/P2.2
+  39   1      //        P2.3/P2.7/P3.7/P4.2/P4.4/P4.5
+  40   1      /////////////////////////////////////////////////
+  41   1         int temp;
+  42   1        unsigned char buf[6];
+  43   1        P3M1 &= 0xFC; P3M0 &= 0xFC;  //设置P3.0~P3.1为准双向口
+*** ERROR C202 IN LINE 43 OF main.c: 'P3M1': undefined identifier
+*** ERROR C202 IN LINE 43 OF main.c: 'P3M0': undefined identifier
+  44   1        P4M1 &= 0x00; P4M0 &= 0x00;  //设置P5.2~P5.3为准双向口
+*** ERROR C202 IN LINE 44 OF main.c: 'P4M1': undefined identifier
+*** ERROR C202 IN LINE 44 OF main.c: 'P4M0': undefined identifier
+  45   1        
+  46   1        delay_ms(500);    //上电延时    
+C51 COMPILER V9.56.0.0   MAIN                                                              07/01/2018 11:05:00 PAGE 2   
+
+  47   1        UartInit();
+  48   1      //  InitMPU6050();  //初始化MPU6050
+  49   1        InitSinglefdc2214();//
+  50   1        delay_ms(150);
+  51   1        while(1)
+  52   1        {
+  53   2      //    Display10BitData(GetData(ACCEL_XOUT_H));  //显示X轴加速度
+  54   2      //    Display10BitData(GetData(ACCEL_YOUT_H));  //显示Y轴加速度
+  55   2      //    Display10BitData(GetData(ACCEL_ZOUT_H));  //显示Z轴加速度
+  56   2      //    Display10BitData(GetData(GYRO_XOUT_H));   //显示X轴角速度
+  57   2      //    Display10BitData(GetData(GYRO_YOUT_H));   //显示Y轴角速度
+  58   2      //    Display10BitData(GetData(GYRO_ZOUT_H));   //显示Z轴角速度
+  59   2           
+  60   2          //U1SendData(0x0d);                          //换行，回车
+  61   2          //U1SendData(0x0a);                          //换行，回车
+  62   2          temp = ReadRegfdc2214(0x00);
+  63   2          lcd_printf(buf, temp);
+  64   2          U1SendString(buf);
+  65   2          delay_ms(1000);
+  66   2        }
+  67   1      }  
+  68          
+
+C51 COMPILATION COMPLETE.  3 WARNING(S),  4 ERROR(S)

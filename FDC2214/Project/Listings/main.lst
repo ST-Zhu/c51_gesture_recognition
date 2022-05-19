@@ -1,0 +1,244 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              07/23/2018 13:50:01 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Program Files\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\bsp\inc) DEBUG O
+                    -BJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "bsp.h"
+   2          #include "intrins.h"
+   3          #include "codetab.h"
+   4          #include "LQ12864.h"
+   5          
+   6          sbit KEY1=P0^0;
+   7          sbit KEY2=P0^1;
+   8          sbit KEY3=P0^2;
+   9          sbit KEY4=P0^3;
+  10          
+  11          int temp_CH0,temp_CH1,temp_CH2,temp_CH3;
+  12          
+  13          void Init()
+  14          {
+  15   1        delay_ms(500);    //上电延时    
+  16   1        InitSinglefdc2214();//初始化
+  17   1        delay_ms(150);
+  18   1        OLED_Init(); //OLED初始化
+  19   1      }
+  20          
+  21          void Read()
+  22          {
+  23   1        temp_CH0=ReadRegfdc2214(0x00);
+  24   1        temp_CH1=ReadRegfdc2214(0x02);
+  25   1        temp_CH2=ReadRegfdc2214(0x04);
+  26   1        temp_CH3=ReadRegfdc2214(0x06);    //读取数据
+  27   1      }
+  28          
+  29          void Juger_one()
+  30          {
+  31   1        OLED_P16x16Ch(24,0,1);
+  32   1        OLED_P16x16Ch(40,0,2);
+  33   1        OLED_P16x16Ch(57,0,3);
+  34   1        OLED_P16x16Ch(74,0,4);
+  35   1        OLED_P8x16Str(91,0,"1");    //OLED显示判决模式1
+  36   1        
+  37   1        if((temp_CH0>300)&&(temp_CH0<460)&&(temp_CH1>460)&&(temp_CH1<500)&&(temp_CH2>470)&&(temp_CH2<500)&&(temp_
+             -CH3>460)&&(temp_CH3<500))//石头
+  38   1        {
+  39   2          OLED_P16x16Ch(40,2,9);
+  40   2          OLED_P16x16Ch(57,2,10);   //石头
+  41   2        }
+  42   1        if((temp_CH0>480)&&(temp_CH0<500)&&(temp_CH1>400)&&(temp_CH1<460)&&(temp_CH2>400)&&(temp_CH2<470)&&(temp_
+             -CH3>460)&&(temp_CH3<500))//剪刀
+  43   1        {
+  44   2          OLED_P16x16Ch(40,2,16);
+  45   2          OLED_P16x16Ch(57,2,17);   //剪刀
+  46   2        }
+  47   1        if((temp_CH0>300)&&(temp_CH0<460)&&(temp_CH1>300)&&(temp_CH1<440)&&(temp_CH2>300)&&(temp_CH2<450)&&(temp_
+             -CH3>300)&&(temp_CH3<440))//布
+  48   1        {
+  49   2          OLED_P16x16Ch(40,2,23);
+  50   2          OLED_P16x16Ch(57,2,24);   //布
+  51   2        }
+C51 COMPILER V9.56.0.0   MAIN                                                              07/23/2018 13:50:01 PAGE 2   
+
+  52   1        delay_ms(100);
+  53   1        OLED_P16x16Ch(40,2,26);
+  54   1        OLED_P16x16Ch(57,2,27);
+  55   1      }
+  56          
+  57          void Juger_two()
+  58          {
+  59   1        OLED_P16x16Ch(24,0,1);
+  60   1        OLED_P16x16Ch(40,0,2);
+  61   1        OLED_P16x16Ch(57,0,3);
+  62   1        OLED_P16x16Ch(74,0,4);
+  63   1        OLED_P8x16Str(91,0,"2");    //OLED显示判决模式2
+  64   1        
+  65   1        if((temp_CH0>480)&&(temp_CH0<500)&&(temp_CH1>400)&&(temp_CH1<460)&&(temp_CH2>470)&&(temp_CH2<500)&&(temp_
+             -CH3>460)&&(temp_CH3<500))//1
+  66   1        {
+  67   2          OLED_P8x16Str(40,2,"1");
+  68   2        }
+  69   1        if((temp_CH0>480)&&(temp_CH0<500)&&(temp_CH1>400)&&(temp_CH1<460)&&(temp_CH2>400)&&(temp_CH2<470)&&(temp_
+             -CH3>460)&&(temp_CH3<500))//2
+  70   1        {
+  71   2          OLED_P8x16Str(40,2,"2");
+  72   2        }
+  73   1        if((temp_CH0>480)&&(temp_CH0<500)&&(temp_CH1>400)&&(temp_CH1<450)&&(temp_CH2>300)&&(temp_CH2<460)&&(temp_
+             -CH3>300)&&(temp_CH3<450))//3
+  74   1        {
+  75   2          OLED_P8x16Str(40,2,"3");
+  76   2        }
+  77   1        if((temp_CH0>480)&&(temp_CH0<500)&&(temp_CH1>300)&&(temp_CH1<400)&&(temp_CH2>300)&&(temp_CH2<460)&&(temp_
+             -CH3>300)&&(temp_CH3<450))//4
+  78   1        {
+  79   2          OLED_P8x16Str(40,2,"4");
+  80   2        }
+  81   1        if((temp_CH0>300)&&(temp_CH0<460)&&(temp_CH1>300)&&(temp_CH1<440)&&(temp_CH2>300)&&(temp_CH2<450)&&(temp_
+             -CH3>300)&&(temp_CH3<440))//5
+  82   1        {
+  83   2          OLED_P8x16Str(40,2,"5");
+  84   2        }
+  85   1        delay_ms(100);
+  86   1        OLED_P16x16Ch(40,2,26);
+  87   1      }
+  88          
+  89          void Train_one()
+  90          {
+  91   1        OLED_P16x16Ch(24,0,29);
+  92   1        OLED_P16x16Ch(40,0,30);
+  93   1        OLED_P16x16Ch(57,0,31);
+  94   1        OLED_P16x16Ch(74,0,32);
+  95   1        OLED_P8x16Str(91,0,"1");    //OLED显示训练模式1
+  96   1        
+  97   1        delay_ms(1500);
+  98   1        OLED_P16x16Ch(40,2,9);
+  99   1        OLED_P16x16Ch(57,2,10);   //石头
+ 100   1        delay_ms(3000);
+ 101   1        
+ 102   1        OLED_P16x16Ch(40,2,16);
+ 103   1        OLED_P16x16Ch(57,2,17);   //剪刀
+ 104   1        delay_ms(3000);
+ 105   1        
+ 106   1        OLED_P16x16Ch(40,2,23);
+ 107   1        OLED_P16x16Ch(57,2,24);   //布
+ 108   1        delay_ms(3000);
+C51 COMPILER V9.56.0.0   MAIN                                                              07/23/2018 13:50:01 PAGE 3   
+
+ 109   1        
+ 110   1        OLED_CLS();//清屏
+ 111   1        delay_ms(3000);
+ 112   1      }
+ 113          
+ 114          void Train_two()
+ 115          {
+ 116   1        OLED_P16x16Ch(24,0,29);
+ 117   1        OLED_P16x16Ch(40,0,30);
+ 118   1        OLED_P16x16Ch(57,0,31);
+ 119   1        OLED_P16x16Ch(74,0,32);
+ 120   1        OLED_P8x16Str(91,0,"2");    //OLED显示训练模式2
+ 121   1        
+ 122   1        delay_ms(1500);
+ 123   1        OLED_P8x16Str(40,2,"1");
+ 124   1        delay_ms(3000);
+ 125   1        
+ 126   1        OLED_P8x16Str(40,2,"2");
+ 127   1        delay_ms(3000);
+ 128   1        
+ 129   1        OLED_P8x16Str(40,2,"3");
+ 130   1        delay_ms(3000);
+ 131   1        
+ 132   1        OLED_P8x16Str(40,2,"4");
+ 133   1        delay_ms(3000);
+ 134   1        
+ 135   1        OLED_P8x16Str(40,2,"5");
+ 136   1        delay_ms(3000);
+ 137   1        
+ 138   1        OLED_CLS();//清屏
+ 139   1        delay_ms(2000);
+ 140   1      }
+ 141          
+ 142          void main()
+ 143          {
+ 144   1        Init();
+ 145   1        while(1)
+ 146   1        {
+ 147   2          if(KEY1==0)//功能一
+ 148   2          {
+ 149   3            delay(30);
+ 150   3            if(KEY1==0)
+ 151   3            {
+ 152   4              while(KEY1==0);
+ 153   4              while(KEY1!=0)
+ 154   4              {
+ 155   5                Read();
+ 156   5                Juger_one();//判决1
+ 157   5              }
+ 158   4            }
+ 159   3          }
+ 160   2          if(KEY2==0)//功能二
+ 161   2          {
+ 162   3            delay(30);
+ 163   3            if(KEY2==0)
+ 164   3            {
+ 165   4              while(KEY2==0);
+ 166   4              while(KEY2!=0)
+ 167   4              {
+ 168   5                Read();
+ 169   5                Juger_two();//判决2
+ 170   5              }
+C51 COMPILER V9.56.0.0   MAIN                                                              07/23/2018 13:50:01 PAGE 4   
+
+ 171   4            }
+ 172   3          }
+ 173   2          if(KEY3==0)//功能三
+ 174   2          {
+ 175   3            delay(30);
+ 176   3            if(KEY3==0)
+ 177   3            {
+ 178   4              while(KEY3==0);
+ 179   4              Train_one();//训练1
+ 180   4              while(KEY3!=0)
+ 181   4              {
+ 182   5                Read();
+ 183   5                Juger_one();//判决1
+ 184   5              }
+ 185   4            }
+ 186   3          }
+ 187   2          if(KEY4==0)//功能四
+ 188   2          {
+ 189   3            delay(30);
+ 190   3            if(KEY4==0)
+ 191   3            {
+ 192   4              while(KEY4==0);
+ 193   4              Train_two();//训练2
+ 194   4              while(KEY4!=0)
+ 195   4              {
+ 196   5                Read();
+ 197   5                Juger_two();//判决2
+ 198   5              }
+ 199   4            }
+ 200   3          }
+ 201   2          OLED_CLS();//清屏
+ 202   2          delay(1000);
+ 203   2        }
+ 204   1      }
+ 205          //    (temp_CH0>480)&&(temp_CH0<500)&&(temp_CH1>460)&&(temp_CH1<500)&&(temp_CH2>470)&&(temp_CH2<500)&&(temp_
+             -CH3>460)&&(temp_CH3<500)
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   2366    ----
+   CONSTANT SIZE    =   3202    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8      31
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
